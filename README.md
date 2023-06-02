@@ -59,7 +59,7 @@ Define proper host and its IP address into the inventory file
   
 - Creates the right users and directories with the right permissions and owners
 - Installs the Node Exporter
-- AddS:
+- Adds
   - Systemd service file to run it
   - A new host to the Prometheus configuration through <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config> (don't forget that the server with Prometheus may not be located locally, you need to be able to add the configuration to a remote server as well).
   - Runs the Node Exporter service and reloads the Prometheus service when adding a new host to the configuration
