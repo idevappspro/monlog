@@ -4,9 +4,7 @@
 # elasticsearch-8.8.0-linux-x86_64.tar.gz
 version_elasticsearch: 8.8.0
 package_link_elasticsearch: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/6CXAZYO5aEVgZw
-path_elasticsearch: /srv/elasticsearch/{{ version_elasticsearch }}
 
 # kibana-8.8.0-linux-x86_64.tar.gz
 version_kibana: 8.8.0
 package_link_kibana: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/K7Mk2Pip3U-QBg
-path_kibana: /srv/kinaba/{{ version_kibana }}
