@@ -1,2 +1,21 @@
 ---
 # handlers file for logging
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Enable services
+  ansible.builtin.systemd:
+    name: "{{ item }}"
+    enabled: true
+  with_items: 
+    - "elasticsearch"
+    - "kibana"
+
+- name: Restart services
+  ansible.builtin.systemd:
+    state: restarted
+    name: "{{ item }}"
+  with_items: 
+    - "elasticsearch"
+    - "kibana"

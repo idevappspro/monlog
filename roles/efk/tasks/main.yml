@@ -25,10 +25,18 @@
     remote_src: yes
 
 - name: Move downloaded package Elastricsearch to /srv location
-  command: mv /tmp/elasticsearch-{{ version_elasticsearch }} /srv/elasticsearch/
+  command: mv /tmp/elasticsearch-{{ version_elasticsearch }} {{ path_elasticsearch }}
   args:
-    creates: /srv/elasticsearch/
+    creates: "{{ path_elasticsearch }}"
 
+- name: Copy Elasticsearch service file
+  ansible.builtin.copy:
+    src: ../files/elasticsearch.service
+    dest: /usr/lib/systemd/system/elasticsearch.service
+    follow: yes
+    owner: efk
+    group: efk
+    mode: '0770'
 
 ### Kibana
 
@@ -39,6 +47,35 @@
     remote_src: yes
 
 - name: Move downloaded package Kibana to /srv location
-  command: mv /tmp/kibana-{{ version_kibana }} /srv/kibana/
+  command: mv /tmp/kibana-{{ version_kibana }} {{ path_kibana }}
   args:
-    creates: /srv/kibana/
+    creates: "{{ path_kibana }}"
+
+- name: Copy Kibana service file
+  ansible.builtin.copy:
+    src: ../files/kibana.service
+    dest: /usr/lib/systemd/system/kibana.service
+    follow: yes
+    owner: efk
+    group: efk
+    mode: '0770'
+
+# Create firewall rules
+
+- name: Apply firewall rules
+  community.general.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  with_items:
+    - "5601" # Kibana
+    - "9200" # Elasticsearch
+  notify: 
+    - Reload systemd
+    - Enable services
+    - Restart services
+
+# Flush all notifications
+
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  ansible.builtin.meta: flush_handlers

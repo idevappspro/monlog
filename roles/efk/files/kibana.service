@@ -1,0 +1,12 @@
+[Unit]
+Description=Kibana Service
+
+[Service]
+Type=simple
+User=efk
+Group=efk
+ExecStart=/srv/kibana/bin/kibana "-c /srv/kibana/config/kibana.yml"  # location of your kibana
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

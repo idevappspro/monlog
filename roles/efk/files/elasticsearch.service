@@ -1,0 +1,19 @@
+[Unit]
+Description=ElasticSearch Service
+
+[Service]
+RuntimeDirectory=/srv/elasticsearch
+Environment=ES_HOME=/srv/elasticsearch
+Environment=ES_PATH_CONF=/srv/elasticsearch/config
+Environment=ES_HEAP_SIZE=512M
+Environment=ES_JAVA_OPTS=-Xmx2g -Xmsm2g
+Type=simple
+User=efk
+Group=efk
+#User=root
+#Group=root
+ExecStart=/srv/elasticsearch/bin/elasticsearch
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
