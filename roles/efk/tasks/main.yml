@@ -3,17 +3,17 @@
 
 # Ensure user and group efk:efk exists on target server host
 
-- name: Ensure group "efk" exists
+- name: Ensure group "{{ service_group }}" exists
   ansible.builtin.group:
-    name: efk
+    name: "{{ service_group }}"
     state: present
 
-- name: Ensure user "efk" exists
+- name: Ensure user "{{ service_user }}" exists
   ansible.builtin.user:
-    name: efk
+    name: "{{ service_user }}"
+    group: "{{ service_group }}"
     comment: EFK service user
-    group: efk
-    shell: /bin/false
+    shell: /bin/bash
     state: present
 
 ### ElasticSearch
@@ -34,8 +34,8 @@
     src: ../files/elasticsearch.service
     dest: /usr/lib/systemd/system/elasticsearch.service
     follow: yes
-    owner: efk
-    group: efk
+    owner: "{{ service_group }}"
+    group: "{{ service_user }}"
     mode: '0770'
 
 ### Kibana
@@ -56,8 +56,8 @@
     src: ../files/kibana.service
     dest: /usr/lib/systemd/system/kibana.service
     follow: yes
-    owner: efk
-    group: efk
+    owner: "{{ service_group }}"
+    group: "{{ service_user }}"
     mode: '0770'
 
 # Create firewall rules
@@ -68,8 +68,8 @@
     port: "{{ item }}"
     proto: tcp
   with_items:
-    - "5601" # Kibana
-    - "9200" # Elasticsearch
+    - "{{ port_kibana }}"
+    - "{{ port_elasticsearch }}"
   notify: 
     - Reload systemd
     - Enable services

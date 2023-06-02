@@ -10,3 +10,11 @@ path_elasticsearch: /srv/elasticsearch/
 version_kibana: 8.8.0
 package_link_kibana: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/K7Mk2Pip3U-QBg
 path_kibana: /srv/kibana/
+
+# Service user and group
+service_user: efk
+service_group: efk
+
+# Firewall ports
+port_kibana: "5601"
+port_elasticsearch: "9200"
