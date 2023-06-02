@@ -1,4 +1,4 @@
-# Ansible playbook to install Monitoring and Logging software
+# Ansible playbook with roles to install Monitoring and Logging software
 
 A set of Ansible roles to install and configure Prometheus and its exporters, as well as the EFK logging stack.
 
