@@ -50,6 +50,9 @@ ansible-galaxy install -r requirements.yaml
 
 ### 2. Generate SSH key and copy to role files folder
 
+**Note**
+The key files present in the project are provided for introductory purposes. It is highly recommended to create personal keys on your own.
+
 In a terminal window run the following commads:
 
 ```bash
