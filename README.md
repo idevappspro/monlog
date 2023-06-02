@@ -1,6 +1,42 @@
-# PROJECT NAME
+# Workshop "Monitoring and Logging"
 
-## DESCRIPTION
+A set of Ansible roles to install and configure Prometheus and its exporters, as well as the EFK logging stack.
+
+## Roles
+
+### Prometheus
+
+- Creates the right user, group and directories with the right permissions and owners
+- Installs Prometheus Server as a service
+- Adds Configuration with a preset target for monitoring Prometheus itself (see <https://prometheus.io/docs/prometheus/latest/getting_started/#configuring-prometheus-to-monitor-itself>)
+- Adds Systemd service file to run it
+- Starts and restarts the service when the global configuration parameters are changed
+  
+**Note** The list of versions is available on the [github](https://github.com/prometheus/prometheus/releases) page
+
+![Prometheus](./images/prom.png "Prometheus")
+
+### Node Exporter
+  
+- Creates the right users and directories with the right permissions and owners
+- Installs the Node Exporter
+- Adds
+  - Systemd service file to run it
+  - A new host to the Prometheus configuration through <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config> (don't forget that the server with Prometheus may not be located locally, you need to be able to add the configuration to a remote server as well).
+  - Runs the Node Exporter service and reloads the Prometheus service when adding a new host to the configuration
+  
+**Note**: The list of versions is available on the [github](https://github.com/prometheus/node_exporter/releases) page
+  
+Bear in mind that you shouldn't have any configuration conflicts when running the Node Exporter role and the Prometheus role, even though both roles make changes to the config.
+
+![Node Exporter](./images/node.png "Node Exporter")
+
+### EFK (Elasticsearch + Kibana)
+
+- Creates the right users and directories with the right permissions and owners
+- Installs the Elasticsearch and Kibana
+- Add systemd service file to run it
+- Runs the Elasticsearch and Kibana services
 
 ----
 
@@ -41,38 +77,88 @@ Define proper host and its IP address into the inventory file
 
 ----
 
-## Roles
+## Forlders structure
 
-### Prometheus
-
-- Creates the right user, group and directories with the right permissions and owners
-- Installs Prometheus Server as a service
-- Adds Configuration with a preset target for monitoring Prometheus itself (see <https://prometheus.io/docs/prometheus/latest/getting_started/#configuring-prometheus-to-monitor-itself>)
-- Adds Systemd service file to run it
-- Starts and restarts the service when the global configuration parameters are changed
-  
-**Note** The list of versions is available on the [github](https://github.com/prometheus/prometheus/releases) page
-
-![Prometheus](./images/prom.png "Prometheus")
-
-### Node Exporter
-  
-- Creates the right users and directories with the right permissions and owners
-- Installs the Node Exporter
-- Adds
-  - Systemd service file to run it
-  - A new host to the Prometheus configuration through <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#static_config> (don't forget that the server with Prometheus may not be located locally, you need to be able to add the configuration to a remote server as well).
-  - Runs the Node Exporter service and reloads the Prometheus service when adding a new host to the configuration
-  
-**Note**: The list of versions is available on the [github](https://github.com/prometheus/node_exporter/releases) page
-  
-Bear in mind that you shouldn't have any configuration conflicts when running the Node Exporter role and the Prometheus role, even though both roles make changes to the config.
-
-![Node Exporter](./images/node.png "Node Exporter")
-
-### EFK (Elasticsearch + Kibana)
-
-- Creates the right users and directories with the right permissions and owners
-- Installs the Elasticsearch and Kibana
-- Add systemd service file to run it
-- Runs the Elasticsearch and Kibana services
+```text
+── ansible.cfg
+├── images
+│   ├── node.png
+│   └── prom.png
+├── inventory.yaml
+├── playbook.yaml
+├── README.md
+├── requirements.yaml
+└── roles
+    ├── efk
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── files
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── README.md
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── templates
+    │   ├── tests
+    │   │   ├── inventory
+    │   │   └── test.yml
+    │   └── vars
+    │       └── main.yml
+    ├── node_exporter
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── files
+    │   │   └── node_exporter.service
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── README.md
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── templates
+    │   ├── tests
+    │   │   ├── inventory
+    │   │   └── test.yml
+    │   └── vars
+    │       └── main.yml
+    ├── prometheus
+    │   ├── defaults
+    │   │   └── main.yml
+    │   ├── files
+    │   │   └── prometheus.service
+    │   ├── handlers
+    │   │   └── main.yml
+    │   ├── meta
+    │   │   └── main.yml
+    │   ├── README.md
+    │   ├── tasks
+    │   │   └── main.yml
+    │   ├── templates
+    │   ├── tests
+    │   │   ├── inventory
+    │   │   └── test.yml
+    │   └── vars
+    │       └── main.yml
+    └── provision_ssh_key
+        ├── defaults
+        │   └── main.yml
+        ├── files
+        │   ├── ssh_auth
+        │   └── ssh_auth.pub
+        ├── handlers
+        │   └── main.yml
+        ├── meta
+        │   └── main.yml
+        ├── README.md
+        ├── tasks
+        │   └── main.yml
+        ├── templates
+        ├── tests
+        │   ├── inventory
+        │   └── test.yml
+        └── vars
+            └── main.yml
+```
