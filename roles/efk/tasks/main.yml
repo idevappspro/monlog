@@ -1,6 +1,8 @@
 ---
 # tasks file for EFK
 
+# Ensure user and group efk:efk exists on target server host
+
 - name: Ensure group "efk" exists
   ansible.builtin.group:
     name: efk
@@ -18,14 +20,25 @@
 
 - name: Download and Unarchive ElasticSearch package
   ansible.builtin.unarchive:
-    src: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/6CXAZYO5aEVgZw
+    src: "{{ package_link_elasticsearch }}"
     dest: /tmp
     remote_src: yes
+
+- name: Move downloaded package Elastricsearch to /srv location
+  command: mv /tmp/elasticsearch-{{ version_elasticsearch }} /srv/elasticsearch/
+  args:
+    creates: /srv/elasticsearch/
+
 
 ### Kibana
 
 - name: Download and Unarchive Kibana package
   ansible.builtin.unarchive:
-    src: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/K7Mk2Pip3U-QBg
+    src: "{{ package_link_kibana }}"
     dest: /tmp
     remote_src: yes
+
+- name: Move downloaded package Kibana to /srv location
+  command: mv /tmp/kibana-{{ version_kibana }} /srv/kibana/
+  args:
+    creates: /srv/kibana/
