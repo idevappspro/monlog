@@ -2,9 +2,7 @@
 
 A set of Ansible roles to install and configure Prometheus and its exporters, as well as the EFK logging stack.
 
-## Roles
-
-### Prometheus
+## Prometheus
 
 - Creates the right user, group and directories with the right permissions and owners
 - Installs Prometheus Server as a service
@@ -16,7 +14,7 @@ A set of Ansible roles to install and configure Prometheus and its exporters, as
 
 ![Prometheus](./images/prom.png "Prometheus")
 
-### Node Exporter
+## Node Exporter
   
 - Creates the right users and directories with the right permissions and owners
 - Installs the Node Exporter
@@ -31,7 +29,7 @@ Bear in mind that you shouldn't have any configuration conflicts when running th
 
 ![Node Exporter](./images/node.png "Node Exporter")
 
-### EFK (Elasticsearch + Kibana)
+## EFK (Elasticsearch + Kibana)
 
 - Creates the right users and directories with the right permissions and owners
 - Installs the Elasticsearch and Kibana
