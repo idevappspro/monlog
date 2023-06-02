@@ -1,6 +1,49 @@
-# Playbook Roles
+# PROJECT NAME
 
-## Prometheus
+## DESCRIPTION
+
+----
+
+## Requiremetns
+
+### 1. Install requirements
+
+To install both roles and collections required at the same time with one command, run the following:
+
+```bash
+ansible-galaxy install -r requirements.yaml
+```
+
+### 2. Generate SSH key and copy to role files folder
+
+In a terminal window run the following commads:
+
+```bash
+cd ~
+git pull https://github.com/idevappspro/monlog.git
+cd ~/monlog/roles/provision_ssh_key
+ssh-keygen -t rsa ssh-keygen -f ./ssh_auth
+```
+
+Follow the prompts to generate the key. A public and a private key are generated. The public key has .pub in the file name.
+
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ./ssh_auth
+cd ~/monlog
+```
+
+### 3. Inventory
+
+Define proper host and its IP address into the inventory file
+
+```inventory.yaml```
+
+----
+
+## Roles
+
+### Prometheus
 
 - Creates the right user, group and directories with the right permissions and owners
 - Installs Prometheus Server as a service
@@ -12,7 +55,7 @@
 
 ![Prometheus](./images/prom.png "Prometheus")
 
-## Node Exporter
+### Node Exporter
   
 - Creates the right users and directories with the right permissions and owners
 - Installs the Node Exporter
@@ -25,42 +68,11 @@
   
 Bear in mind that you shouldn't have any configuration conflicts when running the Node Exporter role and the Prometheus role, even though both roles make changes to the config.
 
-![Prometheus](./images/node.png "Prometheus")
+![Node Exporter](./images/node.png "Node Exporter")
 
-## EFK (Elasticsearch + Kibana)
+### EFK (Elasticsearch + Kibana)
 
 - Creates the right users and directories with the right permissions and owners
 - Installs the Elasticsearch and Kibana
 - Add systemd service file to run it
 - Runs the Elasticsearch and Kibana services
-
-![Prometheus](./images/node.png "Prometheus")
-
-## Requirements
-
-### 1. Generate SSH key and copy to target machine
-
-In a terminal window, enter the following command:
-
-```ssh-keygen -t rsa```
-
-Follow the prompts to generate the key. You must provide a file name and a passphrase.
-A public and a private key are generated. The public key has .pub in the file name.
-
-Copy the public key to each node computer, by using the following command:
-
-```ssh-copy-id root@server01.prod-br.lan```
-
-### 2. Inventory
-
-Define proper host and its IP address into the inventory file
-
-```inventory.yaml```
-
-### 2. Install requirements
-
-To install both roles and collections required at the same time with one command, run the following:
-
-```bash
-ansible-galaxy install -r requirements.yaml
-```
