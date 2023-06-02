@@ -1,0 +1,31 @@
+---
+# tasks file for EFK
+
+- name: Ensure group "efk" exists
+  ansible.builtin.group:
+    name: efk
+    state: present
+
+- name: Ensure user "efk" exists
+  ansible.builtin.user:
+    name: efk
+    comment: EFK service user
+    group: efk
+    shell: /bin/false
+    state: present
+
+### ElasticSearch
+
+- name: Download and Unarchive ElasticSearch package
+  ansible.builtin.unarchive:
+    src: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/6CXAZYO5aEVgZw
+    dest: /tmp
+    remote_src: yes
+
+### Kibana
+
+- name: Download and Unarchive Kibana package
+  ansible.builtin.unarchive:
+    src: https://getfile.dokpub.com/yandex/get/https://disk.yandex.ru/d/6CXAZYO5aEVgZw
+    dest: /tmp
+    remote_src: yes

@@ -1,0 +1,59 @@
+---
+# tasks file for node_exporter
+- name: Download and Unarchive package
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus/node_exporter/releases/download/v{{ version }}/node_exporter-{{ version }}.linux-amd64.tar.gz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy "node_exporter" to binary location
+  ansible.builtin.copy:
+    src: /tmp/node_exporter-{{ version }}.linux-amd64/node_exporter
+    dest: /usr/local/bin/node_exporter
+    remote_src: yes
+    owner: root
+    group: root
+    mode: '0550'
+
+- name: Create a directory to store service options file
+  ansible.builtin.copy:
+    dest: /etc/sysconfig/node_exporter
+    content: |
+      OPTIONS=''
+    remote_src: yes
+    follow: yes
+    owner: root
+    group: root
+    mode: '0550'
+
+- name: Add job to prometheus configuration
+  lineinfile:
+    path: "/etc/prometheus/prometheus.yml"
+    line: >2
+        - job_name: "node"
+          static_configs:
+            - targets: ["{{ ansible_host }}:9100"]
+    insertbefore: EOF
+
+- name: Allow all access to tcp port 9100
+  community.general.ufw:
+    rule: allow
+    port: '9100'
+    proto: tcp
+
+- name: Copy a service file
+  ansible.builtin.copy:
+    src: ../files/node_exporter.service
+    dest: /usr/lib/systemd/system/node_exporter.service
+    follow: yes
+    owner: root
+    group: root
+    mode: '0550'
+  notify: 
+    - Reload systemd
+    - Enable Node Exporter
+    - Restart Node Exporter
+    - Reload Prometheus
+  
+- name: Force all notified handlers to run at this point, not waiting for normal sync points
+  ansible.builtin.meta: flush_handlers

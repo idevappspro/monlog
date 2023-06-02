@@ -1,0 +1,17 @@
+all:
+  hosts:
+    server01.prod-br.lan:
+      ansible_host: 172.30.0.202
+  children:
+    prometheus:
+      hosts:
+        server01.prod-br.lan:
+    node_exporter:
+      hosts:
+        server01.prod-br.lan:
+    efk:
+      hosts:
+        server01.prod-br.lan:
+    fluentbit:
+      hosts:
+        server01.prod-br.lan:

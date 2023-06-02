@@ -1,0 +1,4 @@
+---
+# defaults file for logging
+version_elasticsearch: 8.8.0
+version_kibana: 8.8.0
