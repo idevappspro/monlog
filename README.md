@@ -75,7 +75,17 @@ Define proper host and its IP address into the inventory file
 
 ----
 
-## Forlders structure
+## Run playbook
+
+Execute the following command in you terminal from the machine with access to target hosts
+
+```bash
+ansible-playbook playbook.yaml
+```
+
+----
+
+## Project file structure
 
 ```text
 ── ansible.cfg
