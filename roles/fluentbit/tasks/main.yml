@@ -20,16 +20,11 @@
   apt:
     clean: yes
 
-- name: Download Fluent Bit source
-  get_url:
-    url: "https://fluentbit.io/releases/2.1/source-{{ fluentbit_version }}.tar.gz"
-    dest: "/tmp/fluent-bit-{{ fluentbit_version }}.tar.gz"
-
-- name: Extract Fluent Bit source
-  unarchive:
-    src: "/tmp/fluent-bit-{{ fluentbit_version }}.tar.gz"
-    dest: "/tmp"
-    remote_src: true
+- name: Download and Extract Fluent Bit source
+  ansible.builtin.unarchive:
+    src: https://fluentbit.io/releases/2.1/source-{{ fluentbit_version }}.tar.gz
+    dest: /tmp
+    remote_src: yes
 
 - name: Compile and install Fluent Bit
   command: |
