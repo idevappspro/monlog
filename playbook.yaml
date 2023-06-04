@@ -33,5 +33,7 @@
     elasticsearch_host: "localhost"
     elasticsearch_port: 9200
     logstash_prefix: "logstash"
+  remote_user: root
+  become: true
   roles:
     - fluentbit
