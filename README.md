@@ -36,6 +36,8 @@ Bear in mind that you shouldn't have any configuration conflicts when running th
 - Add systemd service file to run it
 - Runs the Elasticsearch and Kibana services
 
+![Elasticsearch](./images/elastic.png "Elasticsearch")
+
 Use the following command to retrieve the password for http.p12:
 
 ```bash
