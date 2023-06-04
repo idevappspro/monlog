@@ -5,16 +5,16 @@ all:
   children:
     prometheus:
       hosts:
-        server01.prod-br.lan:
+        server01.prod-br.lan
     node_exporter:
       hosts:
-        server01.prod-br.lan:
+        server01.prod-br.lan
     elasticsearch:
       hosts:
-        server01.prod-br.lan:
+        server01.prod-br.lan
     kibana:
       hosts:
-        server01.prod-br.lan:
+        server01.prod-br.lan
     fluentbit:
       hosts:
-        server01.prod-br.lan:
+        server01.prod-br.lan

@@ -3,5 +3,11 @@
 - include_tasks: elasticsearch.yml
   when: (inventory_hostname in groups['elasticsearch'])
 
+- name: Flush handlers
+  meta: flush_handlers
+
 - include_tasks: kibana.yml
   when: (inventory_hostname in groups['kibana'])
+
+- name: Flush handlers
+  meta: flush_handlers
