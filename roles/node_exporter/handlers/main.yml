@@ -3,18 +3,22 @@
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
+  listen: reload_systemd
 
 - name: Enable Node Exporter
   ansible.builtin.systemd:
     name: node_exporter
     enabled: true
+  listen: enable_node_exporter
 
 - name: Restart Node Exporter
   ansible.builtin.systemd:
     state: restarted
     name: node_exporter
+  listen: restart_node_exporter
 
 - name: Reload Prometheus
   ansible.builtin.systemd:
     state: reloaded
     name: prometheus
+  listen: reload_prometheus

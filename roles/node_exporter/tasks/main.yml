@@ -61,7 +61,7 @@
     group: root
     mode: "0550"
   notify: 
-    - Reload systemd
-    - Enable Node Exporter
-    - Restart Node Exporter
-    - Reload Prometheus
+    - reload_systemd
+    - enable_node_exporter
+    - restart_node_exporter
+    - reload_prometheus
