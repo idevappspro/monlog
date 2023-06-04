@@ -29,7 +29,7 @@
 - name: FLUENTBIT
   hosts: fluentbit
   vars:
-    fluentbit_version: "1.8.6"
+    fluentbit_version: "2.1.4"
     elasticsearch_host: "localhost"
     elasticsearch_port: 9200
     logstash_prefix: "logstash"
