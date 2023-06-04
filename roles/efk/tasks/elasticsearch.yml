@@ -43,6 +43,24 @@
   ansible.builtin.shell: chmod 0770 -R {{ path_elasticsearch }}
   become: true
 
+- name: Set configuration parameter network.host
+  ansible.builtin.lineinfile:
+    path: /srv/elasticsearch/config/elasticsearch.yml
+    search_string: '#network.host:'
+    line: 'network.host: "{{ ansible_host }}"'
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0770'
+
+- name: Set configuration parameter http.port
+  ansible.builtin.lineinfile:
+    path: /srv/elasticsearch/config/elasticsearch.yml
+    search_string: '#http.port:'
+    line: 'http.port: "{{ port_elasticsearch }}"'
+    owner: elasticsearch
+    group: elasticsearch
+    mode: '0770'
+
 - name: Set firewall rule for Elasticsearch
   community.general.ufw:
     rule: allow

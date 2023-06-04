@@ -42,6 +42,42 @@
   ansible.builtin.shell: chmod 0770 -R {{ path_kibana }}
   become: true
 
+- name: Set server.port
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.port:'
+    line: 'server.port: "5601"'
+    owner: kibana
+    group: kibana
+    mode: '0770'
+
+- name: Set server.host
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.host:'
+    line: 'server.host: "{{ ansible_host }}"'
+    owner: kibana
+    group: kibana
+    mode: '0770'
+
+- name: Set server.publicBaseUrl
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.publicBaseUrl:'
+    line: 'server.publicBaseUrl: "http://{{ ansible_host }}:5601"'
+    owner: kibana
+    group: kibana
+    mode: '0770'
+
+- name: Set status.allowAnonymous
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#status.allowAnonymous:'
+    line: 'status.allowAnonymous: true'
+    owner: kibana
+    group: kibana
+    mode: '0770'
+
 - name: Wrapup Elasticsearch hosts array
   ansible.builtin.set_fact:
     elasticsearch_hosts: "{{ elasticsearch_hosts + ['https://' + item + ':9200'] }}"
