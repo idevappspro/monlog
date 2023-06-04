@@ -43,7 +43,7 @@
   ansible.builtin.shell: chmod 0770 -R {{ path_elasticsearch }}
   become: true
 
-- name: Apply firewall rule
+- name: Set firewall rule for Elasticsearch
   community.general.ufw:
     rule: allow
     port: "{{ port_elasticsearch }}"

@@ -83,7 +83,7 @@
     group: kibana
     mode: '0770'
 
-- name: Apply firewall rule
+- name: Set firewall rule for Kibana
   community.general.ufw:
     rule: allow
     port: "{{ port_kibana }}"
