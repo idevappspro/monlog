@@ -25,3 +25,13 @@
   become: true
   roles:
     - efk
+
+- name: FLUENTBIT
+  hosts: fluentbit
+  vars:
+    fluentbit_version: "1.8.6"
+    elasticsearch_host: "localhost"
+    elasticsearch_port: 9200
+    logstash_prefix: "logstash"
+  roles:
+    - fluentbit

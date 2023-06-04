@@ -1,0 +1,61 @@
+---
+- name: Install Fluent Bit dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - gcc
+    - make
+
+- name: Download Fluent Bit source
+  get_url:
+    url: "https://fluentbit.io/releases/{{ fluentbit_version }}/fluent-bit-{{ fluentbit_version }}.tar.gz"
+    dest: "/tmp/fluent-bit-{{ fluentbit_version }}.tar.gz"
+
+- name: Extract Fluent Bit source
+  unarchive:
+    src: "/tmp/fluent-bit-{{ fluentbit_version }}.tar.gz"
+    dest: "/tmp"
+    remote_src: true
+
+- name: Compile and install Fluent Bit
+  command: |
+    cd /tmp/fluent-bit-{{ fluentbit_version }}
+    ./configure --prefix=/usr/local/fluent-bit
+    make
+    make install
+
+- name: Create Fluent Bit user and group
+  user:
+    name: fluentbit
+    state: present
+    system: true
+
+- name: Create Fluent Bit service directory
+  file:
+    path: /etc/fluent-bit
+    state: directory
+    owner: fluentbit
+    group: fluentbit
+
+- name: Copy Fluent Bit configuration file
+  template:
+    src: fluent-bit.conf.j2
+    dest: /etc/fluent-bit/fluent-bit.conf
+    owner: fluentbit
+    group: fluentbit
+    mode: 0644
+
+- name: Copy Fluent Bit systemd service file
+  template:
+    src: fluent-bit.service.j2
+    dest: /etc/systemd/system/fluent-bit.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start Fluent Bit service
+  systemd:
+    name: fluent-bit
+    state: started
+    enabled: yes

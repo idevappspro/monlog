@@ -1,0 +1,12 @@
+[Unit]
+Description=Fluent Bit
+Documentation=http://fluentbit.io/documentation/0.13/
+
+[Service]
+ExecStart=/usr/local/fluent-bit/bin/fluent-bit -c /etc/fluent-bit/fluent-bit.conf
+User=fluentbit
+Group=fluentbit
+Restart=always
+
+[Install]
+WantedBy=default.target

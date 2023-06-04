@@ -1,0 +1,20 @@
+[SERVICE]
+    Daemon  off
+    Flush   1
+
+[INPUT]
+    Name        systemd
+    Tag         journald
+    Read_From_Tail  True
+
+[OUTPUT]
+    Name        es
+    Match       *
+    Host        {{ elasticsearch_host }}
+    Port        {{ elasticsearch_port }}
+    Logstash_Format On
+    Retry_Limit False
+    Time_Key    @timestamp
+    Replace_Dots    On
+    Logstash_Prefix {{ logstash_prefix }}
+    Logstash_Format json
