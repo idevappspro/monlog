@@ -5,7 +5,7 @@ Description=Kibana Service
 Type=simple
 User=kibana
 Group=kibana
-ExecStart=/srv/kibana/bin/kibana -c /srv/kibana/config/kibana.yml  # location of your kibana
+ExecStart=/srv/kibana/bin/kibana serve --config /srv/kibana/config/kibana.yml  # location of your kibana
 Restart=always
 
 [Install]

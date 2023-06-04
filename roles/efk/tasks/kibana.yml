@@ -42,36 +42,9 @@
   ansible.builtin.shell: chmod 0770 -R {{ path_kibana }}
   become: true
 
-- name: Set Kibana server port
-  ansible.builtin.lineinfile:
-    path: /srv/kibana/config/kibana.yml
-    search_string: '#server.port'
-    line: 'server.port: 5601'
-    owner: kibana
-    group: kibana
-    mode: '0770'
-
-- name: Set Kibana server host
-  ansible.builtin.lineinfile:
-    path: /srv/kibana/config/kibana.yml
-    search_string: '#server.host:'
-    line: 'server.host: "localhost"'
-    owner: kibana
-    group: kibana
-    mode: '0770'
-
-- name: Ensure Kibana server ssl is off
-  ansible.builtin.lineinfile:
-    path: /srv/kibana/config/kibana.yml
-    search_string: '#server.ssl.enabled:'
-    line: 'server.ssl.enabled: false'
-    owner: kibana
-    group: kibana
-    mode: '0770'
-
 - name: Wrapup Elasticsearch hosts array
   ansible.builtin.set_fact:
-    elasticsearch_hosts: "{{ elasticsearch_hosts + ['http://' + item + ':9200'] }}"
+    elasticsearch_hosts: "{{ elasticsearch_hosts + ['https://' + item + ':9200'] }}"
   with_items: "{{ groups['elasticsearch'] }}"
 
 - name: Set Elasticsearch host
