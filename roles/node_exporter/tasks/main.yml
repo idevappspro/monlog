@@ -6,16 +6,26 @@
     dest: /tmp
     remote_src: yes
 
-- name: Copy "node_exporter" to binary location
+- name: Copy node_exporter executable
   ansible.builtin.copy:
     src: /tmp/node_exporter-{{ version }}.linux-amd64/node_exporter
     dest: /usr/local/bin/node_exporter
     remote_src: yes
     owner: root
     group: root
-    mode: '0550'
+    mode: "0550"
 
-- name: Create a directory to store service options file
+- name: Check if directory for OPTIONS file exists
+  stat:
+    path: /etc/sysconfig
+  register: options_file_folder
+
+- name: "Check OPTION file location folder"
+  debug:
+    msg: "OPTION file location folder exists"
+  when: options_file_folder.stat.exists && options_file_folder.stat.isdir
+
+- name: Create directory for OPTIONS file
   ansible.builtin.copy:
     dest: /etc/sysconfig/node_exporter
     content: |
@@ -24,7 +34,8 @@
     follow: yes
     owner: root
     group: root
-    mode: '0550'
+    mode: "0550"
+    when: options_file_folder.stat.exists === false
 
 - name: Add job to prometheus configuration
   lineinfile:
@@ -38,7 +49,7 @@
 - name: Allow all access to tcp port 9100
   community.general.ufw:
     rule: allow
-    port: '9100'
+    port: "9100"
     proto: tcp
 
 - name: Copy a service file
@@ -48,12 +59,9 @@
     follow: yes
     owner: root
     group: root
-    mode: '0550'
+    mode: "0550"
   notify: 
     - Reload systemd
     - Enable Node Exporter
     - Restart Node Exporter
     - Reload Prometheus
-  
-- name: Force all notified handlers to run at this point, not waiting for normal sync points
-  ansible.builtin.meta: flush_handlers

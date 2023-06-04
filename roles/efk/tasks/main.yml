@@ -24,7 +24,7 @@
     dest: /tmp
     remote_src: yes
 
-- name: Move downloaded package Elastricsearch to /srv location
+- name: Move downloaded package Elasticsearch to /srv location
   command: mv /tmp/elasticsearch-{{ version_elasticsearch }} {{ path_elasticsearch }}
   args:
     creates: "{{ path_elasticsearch }}"
@@ -33,10 +33,9 @@
   ansible.builtin.copy:
     src: ../files/elasticsearch.service
     dest: /usr/lib/systemd/system/elasticsearch.service
-    follow: yes
     owner: "{{ service_group }}"
     group: "{{ service_user }}"
-    mode: '0770'
+    mode: "0770"
 
 ### Kibana
 
@@ -55,13 +54,18 @@
   ansible.builtin.copy:
     src: ../files/kibana.service
     dest: /usr/lib/systemd/system/kibana.service
-    follow: yes
     owner: "{{ service_group }}"
     group: "{{ service_user }}"
-    mode: '0770'
+    mode: "0770"
+
+- name: Recursively change ownership of a files
+  ansible.builtin.shell: chmod 0770 -R {{ item }}
+  with_items:
+    - "{{ path_elasticsearch }}"
+    - "{{ path_kibana }}"
+  become: true
 
 # Create firewall rules
-
 - name: Apply firewall rules
   community.general.ufw:
     rule: allow
@@ -74,8 +78,3 @@
     - Reload systemd
     - Enable services
     - Restart services
-
-# Flush all notifications
-
-- name: Force all notified handlers to run at this point, not waiting for normal sync points
-  ansible.builtin.meta: flush_handlers

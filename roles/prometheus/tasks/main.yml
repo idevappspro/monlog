@@ -20,30 +20,29 @@
     dest: /tmp
     remote_src: yes
 
-- name: Copy "prometheus" to binary location
+- name: Copy "prometheus" executable
   ansible.builtin.copy:
     src: /tmp/prometheus-{{ version }}.linux-amd64/prometheus
     dest: /usr/local/bin/prometheus
     remote_src: yes
     owner: prometheus
     group: prometheus
-    mode: '0770'
+    mode: "0770"
 
-- name: Copy "promtool" to binary location
+- name: Copy "promtool" executable
   ansible.builtin.copy:
     src: /tmp/prometheus-{{ version }}.linux-amd64/promtool
     dest: /usr/local/bin/promtool
     remote_src: yes
     owner: prometheus
     group: prometheus
-    mode: '0770'
+    mode: "0770"
 
 - name: Create directory for configuration file
   ansible.builtin.file:
     path: /etc/prometheus
     state: directory
-    mode: '0770'
-    recurse: yes
+    mode: "0770"
     owner: prometheus
     group: prometheus
 
@@ -52,16 +51,15 @@
     src: /tmp/prometheus-{{ version }}.linux-amd64/prometheus.yml
     remote_src: yes
     dest: /etc/prometheus/prometheus.yml
-    follow: yes
     owner: prometheus
     group: prometheus
-    mode: '0770'
+    mode: "0770"
 
 - name: Add prometheus self monitoring job 
   ansible.builtin.replace:
     path: /etc/prometheus/prometheus.yml
-    regexp: 'localhost:9090'
-    replace: '{{ ansible_host }}:9090'
+    regexp: "localhost:9090"
+    replace: "{{ ansible_host }}:9090"
 
 - name: Validate configuration
   ansible.builtin.command: 'promtool check config /etc/prometheus/prometheus.yml'
@@ -74,7 +72,7 @@
   ansible.builtin.file:
     path: /var/lib/prometheus
     state: directory
-    mode: '0770'
+    mode: "0770"
     owner: prometheus
     group: prometheus
 
@@ -82,8 +80,7 @@
   ansible.builtin.file:
     path: /etc/sysconfig
     state: directory
-    mode: '0660'
-    recurse: yes
+    mode: "0660"
     owner: prometheus
     group: prometheus
 
@@ -93,15 +90,14 @@
     content: |
       OPTIONS='--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus/'
     remote_src: yes
-    follow: yes
     owner: prometheus
     group: prometheus
-    mode: '0770'
+    mode: "0770"
 
 - name: Allow all access to tcp port 9090
   community.general.ufw:
     rule: allow
-    port: '9090'
+    port: "9090"
     proto: tcp
 
 - name: Copy a service file
@@ -111,12 +107,8 @@
     follow: yes
     owner: prometheus
     group: prometheus
-    mode: '0770'
+    mode: "0770"
   notify: 
     - Reload systemd
     - Enable Prometheus
     - Restart Prometheus
-    - Cleanup tmp folder
-
-- name: Force all notified handlers to run at this point, not waiting for normal sync points
-  ansible.builtin.meta: flush_handlers
