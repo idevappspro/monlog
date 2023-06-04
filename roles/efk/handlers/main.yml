@@ -5,18 +5,22 @@
   ansible.builtin.systemd:
     daemon_reload: true
 
-- name: Start efk services
+- name: Start Elasticsearch service
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: "elasticsearch"
     state: started
-  with_items:
-    - elasticsearch
-    - kibana
 
-- name: Enable efk services
+- name: Enable Elasticsearch service
   ansible.builtin.systemd:
-    name: "{{ item }}"
+    name: "elasticsearch"
     enabled: yes
-  with_items:
-    - elasticsearch
-    - kibana
+
+- name: Start Kibana service
+  ansible.builtin.systemd:
+    name: "kibana"
+    state: started
+    
+- name: Enable Kibana service
+  ansible.builtin.systemd:
+    name: "kibana"
+    enabled: yes

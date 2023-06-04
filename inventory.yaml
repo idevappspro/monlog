@@ -9,7 +9,10 @@ all:
     node_exporter:
       hosts:
         server01.prod-br.lan:
-    efk:
+    elasticsearch:
+      hosts:
+        server01.prod-br.lan:
+    kibana:
       hosts:
         server01.prod-br.lan:
     fluentbit:

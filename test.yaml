@@ -1,0 +1,18 @@
+- name: Wrapup Elasticsearch hosts array
+  hosts: 127.0.0.1
+  connection: local
+  
+  vars:
+    efk:
+      - "10.10.10.1"
+      - "10.10.10.2"
+    elasticsearch_hosts: []
+  
+  tasks:
+    - name: Prepare array
+      ansible.builtin.set_fact:
+        elasticsearch_hosts: "{{ elasticsearch_hosts + ['http://' + item + ':9200'] }}"
+      with_items: "{{ efk }}"
+    
+    - name: show array
+      debug: var=elasticsearch_hosts

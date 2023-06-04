@@ -14,7 +14,13 @@
     name: node_exporter
     state: started
 
-- name: Restart prometheus
-  ansible.builtin.systemd:
-    name: prometheus
-    state: restarted
+# - name: Restart prometheus
+#   ansible.builtin.systemd:
+#     name: prometheus
+#     state: restarted
+
+- name: Reload prometheus
+  ansible.builtin.uri:
+    url: http://{{ item }}:9090/-/reload
+    method: POST
+  with_items: "{{ groups['prometheus'] }}"

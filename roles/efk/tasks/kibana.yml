@@ -1,0 +1,94 @@
+- name: Ensure group kibana exists
+  ansible.builtin.group:
+    name: "kibana"
+    state: present
+
+- name: Ensure user kibana exists
+  ansible.builtin.user:
+    name: "kibana"
+    group: "kibana"
+    comment: Kibana service user
+    shell: /bin/bash
+    state: present
+
+- name: Download and Unarchive Kibana package
+  ansible.builtin.unarchive:
+    src: "{{ package_link_kibana }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Move Kibana package content to /srv/kibana folder
+  command: mv /tmp/kibana-{{ version_kibana }} {{ path_kibana }}
+  args:
+    creates: "{{ path_kibana }}"
+    
+- name: Copy Kibana service file
+  ansible.builtin.copy:
+    src: ../files/kibana.service
+    dest: /usr/lib/systemd/system/kibana.service
+    owner: "kibana"
+    group: "kibana"
+    mode: '0770'
+
+- name: Recursively change ownership of a directory
+  ansible.builtin.file:
+    path: "{{ path_kibana }}"
+    state: directory
+    recurse: yes
+    owner: "kibana"
+    group: "kibana"
+
+- name: Recursively change permissions of a files
+  ansible.builtin.shell: chmod 0770 -R {{ path_kibana }}
+  become: true
+
+- name: Set Kibana server port
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.port'
+    line: 'server.port: 5601'
+    owner: "kibana"
+    group: "kibana"
+    mode: '0770'
+
+- name: Set Kibana server host
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.host:'
+    line: 'server.host: "localhost"'
+    owner: "kibana"
+    group: "kibana"
+    mode: '0770'
+
+- name: Ensure Kibana server ssl is off
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#server.ssl.enabled:'
+    line: 'server.ssl.enabled: false'
+    owner: "kibana"
+    group: "kibana"
+    mode: '0770'
+
+- name: Wrapup Elasticsearch hosts array
+  ansible.builtin.set_fact:
+    elasticsearch_hosts: "{{ elasticsearch_hosts + ['http://' + item + ':9200'] }}"
+  with_items: "{{ groups['elasticsearch'] }}"
+
+- name: Set Elasticsearch host
+  ansible.builtin.lineinfile:
+    path: /srv/kibana/config/kibana.yml
+    search_string: '#elasticsearch.hosts:'
+    line: 'elasticsearch.hosts: {{ elasticsearch_hosts | split(",") }}'
+    owner: "kibana"
+    group: "kibana"
+    mode: '0770'
+
+- name: Apply firewall rule
+  community.general.ufw:
+    rule: allow
+    port: "{{ port_kibana }}"
+    proto: tcp
+  notify: 
+    - Reload systemd
+    - Enable Kibana service
+    - Start Kibana service

@@ -35,6 +35,13 @@
             - targets: ["{{ ansible_host }}:9100"]
     insertbefore: EOF
 
+- name: Validate Prometheus configuration
+  ansible.builtin.command: 'promtool check config /etc/prometheus/prometheus.yml'
+  register: validation_result
+
+- name: Show validation result
+  debug: msg="{{ validation_result.stdout_lines }}"
+
 - name: Allow all access to tcp port 9100
   community.general.ufw:
     rule: allow
@@ -52,4 +59,4 @@
     - Reload systemd
     - Start node_exporter
     - Enable node_exporter
-    - Restart prometheus
+    - Reload prometheus

@@ -20,7 +20,7 @@
     - node_exporter
 
 - name: EFK STACK
-  hosts: efk
+  hosts: elasticsearch, kibana
   remote_user: root
   become: true
   roles:

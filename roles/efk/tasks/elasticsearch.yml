@@ -1,0 +1,54 @@
+---
+- name: Ensure group elasticsearch exists
+  ansible.builtin.group:
+    name: "elasticsearch"
+    state: present
+
+- name: Ensure user elasticsearch exists
+  ansible.builtin.user:
+    name: "elasticsearch"
+    group: "elasticsearch"
+    comment: Elasticsearch service user
+    shell: /bin/bash
+    state: present
+
+- name: Download and Unarchive Elasticsearch package
+  ansible.builtin.unarchive:
+    src: "{{ package_link_elasticsearch }}"
+    dest: /tmp
+    remote_src: yes
+
+- name: Move Elasticsearch package content to /srv/elasticsearch folder
+  command: mv /tmp/elasticsearch-{{ version_elasticsearch }} {{ path_elasticsearch }}
+  args:
+    creates: "{{ path_elasticsearch }}"
+
+- name: Copy Elasticsearch service file
+  ansible.builtin.copy:
+    src: ../files/elasticsearch.service
+    dest: /usr/lib/systemd/system/elasticsearch.service
+    owner: "elasticsearch"
+    group: "elasticsearch"
+    mode: '0770'
+
+- name: Recursively change ownership of a directory
+  ansible.builtin.file:
+    path: "{{ path_elasticsearch }}"
+    state: directory
+    recurse: yes
+    owner: "elasticsearch"
+    group: "elasticsearch"
+
+- name: Recursively change permissions of a files
+  ansible.builtin.shell: chmod 0770 -R {{ path_elasticsearch }}
+  become: true
+
+- name: Apply firewall rule
+  community.general.ufw:
+    rule: allow
+    port: "{{ port_elasticsearch }}"
+    proto: tcp
+  notify: 
+    - Reload systemd
+    - Enable Elasticsearch service
+    - Start Elasticsearch service

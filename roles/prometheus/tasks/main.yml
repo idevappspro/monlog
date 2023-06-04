@@ -88,7 +88,7 @@
   ansible.builtin.copy:
     dest: /etc/sysconfig/prometheus
     content: |
-      OPTIONS='--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus/'
+      OPTIONS='--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/var/lib/prometheus/ --web.enable-lifecycle'
     remote_src: yes
     owner: prometheus
     group: prometheus
