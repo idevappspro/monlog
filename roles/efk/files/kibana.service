@@ -3,8 +3,8 @@ Description=Kibana Service
 
 [Service]
 Type=simple
-User=efk
-Group=efk
+User=kibana
+Group=kibana
 ExecStart=/srv/kibana/bin/kibana "-c /srv/kibana/config/kibana.yml"  # location of your kibana
 Restart=always
 

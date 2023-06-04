@@ -1,12 +1,12 @@
 - name: Ensure group kibana exists
   ansible.builtin.group:
-    name: "kibana"
+    name: kibana
     state: present
 
 - name: Ensure user kibana exists
   ansible.builtin.user:
-    name: "kibana"
-    group: "kibana"
+    name: kibana
+    group: kibana
     comment: Kibana service user
     shell: /bin/bash
     state: present
@@ -26,8 +26,8 @@
   ansible.builtin.copy:
     src: ../files/kibana.service
     dest: /usr/lib/systemd/system/kibana.service
-    owner: "kibana"
-    group: "kibana"
+    owner: kibana
+    group: kibana
     mode: '0770'
 
 - name: Recursively change ownership of a directory
@@ -35,8 +35,8 @@
     path: "{{ path_kibana }}"
     state: directory
     recurse: yes
-    owner: "kibana"
-    group: "kibana"
+    owner: kibana
+    group: kibana
 
 - name: Recursively change permissions of a files
   ansible.builtin.shell: chmod 0770 -R {{ path_kibana }}
@@ -47,8 +47,8 @@
     path: /srv/kibana/config/kibana.yml
     search_string: '#server.port'
     line: 'server.port: 5601'
-    owner: "kibana"
-    group: "kibana"
+    owner: kibana
+    group: kibana
     mode: '0770'
 
 - name: Set Kibana server host
@@ -56,8 +56,8 @@
     path: /srv/kibana/config/kibana.yml
     search_string: '#server.host:'
     line: 'server.host: "localhost"'
-    owner: "kibana"
-    group: "kibana"
+    owner: kibana
+    group: kibana
     mode: '0770'
 
 - name: Ensure Kibana server ssl is off
@@ -65,8 +65,8 @@
     path: /srv/kibana/config/kibana.yml
     search_string: '#server.ssl.enabled:'
     line: 'server.ssl.enabled: false'
-    owner: "kibana"
-    group: "kibana"
+    owner: kibana
+    group: kibana
     mode: '0770'
 
 - name: Wrapup Elasticsearch hosts array
@@ -78,9 +78,9 @@
   ansible.builtin.lineinfile:
     path: /srv/kibana/config/kibana.yml
     search_string: '#elasticsearch.hosts:'
-    line: 'elasticsearch.hosts: {{ elasticsearch_hosts | split(",") }}'
-    owner: "kibana"
-    group: "kibana"
+    line: 'elasticsearch.hosts: {{ elasticsearch_hosts }}'
+    owner: kibana
+    group: kibana
     mode: '0770'
 
 - name: Apply firewall rule

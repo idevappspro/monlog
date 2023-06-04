@@ -7,20 +7,20 @@
 
 - name: Start Elasticsearch service
   ansible.builtin.systemd:
-    name: "elasticsearch"
+    name: elasticsearch
     state: started
 
 - name: Enable Elasticsearch service
   ansible.builtin.systemd:
-    name: "elasticsearch"
+    name: elasticsearch
     enabled: yes
 
 - name: Start Kibana service
   ansible.builtin.systemd:
-    name: "kibana"
+    name: kibana
     state: started
     
 - name: Enable Kibana service
   ansible.builtin.systemd:
-    name: "kibana"
+    name: kibana
     enabled: yes

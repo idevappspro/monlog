@@ -1,13 +1,13 @@
 ---
 - name: Ensure group elasticsearch exists
   ansible.builtin.group:
-    name: "elasticsearch"
+    name: elasticsearch
     state: present
 
 - name: Ensure user elasticsearch exists
   ansible.builtin.user:
-    name: "elasticsearch"
-    group: "elasticsearch"
+    name: elasticsearch
+    group: elasticsearch
     comment: Elasticsearch service user
     shell: /bin/bash
     state: present
@@ -27,8 +27,8 @@
   ansible.builtin.copy:
     src: ../files/elasticsearch.service
     dest: /usr/lib/systemd/system/elasticsearch.service
-    owner: "elasticsearch"
-    group: "elasticsearch"
+    owner: elasticsearch
+    group: elasticsearch
     mode: '0770'
 
 - name: Recursively change ownership of a directory
@@ -36,8 +36,8 @@
     path: "{{ path_elasticsearch }}"
     state: directory
     recurse: yes
-    owner: "elasticsearch"
-    group: "elasticsearch"
+    owner: elasticsearch
+    group: elasticsearch
 
 - name: Recursively change permissions of a files
   ansible.builtin.shell: chmod 0770 -R {{ path_elasticsearch }}
