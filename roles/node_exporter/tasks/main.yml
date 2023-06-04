@@ -23,7 +23,7 @@
 - name: "Check OPTION file location folder"
   debug:
     msg: "OPTION file location folder exists"
-  when: options_file_folder.stat.exists && options_file_folder.stat.isdir
+  when: options_file_folder.stat.exists and options_file_folder.stat.isdir
 
 - name: Create directory for OPTIONS file
   ansible.builtin.copy:
