@@ -1,12 +1,12 @@
 ---
 # tasks file for prometheus
 
-- name: Ensure group "prometheus" exists
+- name: Ensure group prometheus exists
   ansible.builtin.group:
     name: prometheus
     state: present
 
-- name: Ensure user "prometheus" exists
+- name: Ensure user prometheus exists
   ansible.builtin.user:
     name: prometheus
     comment: Prometheus service user
@@ -20,29 +20,29 @@
     dest: /tmp
     remote_src: yes
 
-- name: Copy "prometheus" executable
+- name: Copy prometheus executable
   ansible.builtin.copy:
     src: /tmp/prometheus-{{ version }}.linux-amd64/prometheus
     dest: /usr/local/bin/prometheus
     remote_src: yes
     owner: prometheus
     group: prometheus
-    mode: "0770"
+    mode: '0770'
 
-- name: Copy "promtool" executable
+- name: Copy promtool executable
   ansible.builtin.copy:
     src: /tmp/prometheus-{{ version }}.linux-amd64/promtool
     dest: /usr/local/bin/promtool
     remote_src: yes
     owner: prometheus
     group: prometheus
-    mode: "0770"
+    mode: '0770'
 
 - name: Create directory for configuration file
   ansible.builtin.file:
     path: /etc/prometheus
     state: directory
-    mode: "0770"
+    mode: '0770'
     owner: prometheus
     group: prometheus
 
@@ -53,7 +53,7 @@
     dest: /etc/prometheus/prometheus.yml
     owner: prometheus
     group: prometheus
-    mode: "0770"
+    mode: '0770'
 
 - name: Add prometheus self monitoring job 
   ansible.builtin.replace:
@@ -72,7 +72,7 @@
   ansible.builtin.file:
     path: /var/lib/prometheus
     state: directory
-    mode: "0770"
+    mode: '0770'
     owner: prometheus
     group: prometheus
 
@@ -80,7 +80,7 @@
   ansible.builtin.file:
     path: /etc/sysconfig
     state: directory
-    mode: "0660"
+    mode: '0660'
     owner: prometheus
     group: prometheus
 
@@ -92,12 +92,12 @@
     remote_src: yes
     owner: prometheus
     group: prometheus
-    mode: "0770"
+    mode: '0770'
 
 - name: Allow all access to tcp port 9090
   community.general.ufw:
     rule: allow
-    port: "9090"
+    port: '9090'
     proto: tcp
 
 - name: Copy a service file
@@ -107,8 +107,8 @@
     follow: yes
     owner: prometheus
     group: prometheus
-    mode: "0770"
-  notify: 
+    mode: '0770'
+  notify:
     - Reload systemd
-    - Enable Prometheus
-    - Restart Prometheus
+    - Start prometheus
+    - Enable prometheus

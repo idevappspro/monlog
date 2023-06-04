@@ -36,19 +36,18 @@ Bear in mind that you shouldn't have any configuration conflicts when running th
 - Add systemd service file to run it
 - Runs the Elasticsearch and Kibana services
 
+## FluentBit
+
+- Creates the right users and directories with the right permissions and owners
+- Installs FluentBit
+- Add systemd service file to run it
+- Runs the FluentBit
+
 ----
 
 ## Requiremetns
 
-### 1. Install requirements
-
-To install both roles and collections required at the same time with one command, run the following:
-
-```bash
-ansible-galaxy install -r requirements.yaml
-```
-
-### 2. Generate SSH key and copy to role files folder
+### 1. Generate SSH key and copy to role files folder
 
 **Note**
 The key files present in the project are provided for introductory purposes. It is highly recommended to create personal keys on your own.
@@ -70,7 +69,7 @@ ssh-add ./ssh_auth
 cd ~/monlog
 ```
 
-### 3. Inventory
+### 2. Inventory
 
 Define proper host and its IP address into the inventory file
 

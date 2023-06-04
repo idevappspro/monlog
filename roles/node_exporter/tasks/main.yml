@@ -13,17 +13,7 @@
     remote_src: yes
     owner: root
     group: root
-    mode: "0550"
-
-- name: Check if directory for OPTIONS file exists
-  stat:
-    path: /etc/sysconfig
-  register: options_file_folder
-
-- name: "Check OPTION file location folder"
-  debug:
-    msg: "OPTION file location folder exists"
-  when: options_file_folder.stat.exists and options_file_folder.stat.isdir
+    mode: '0550'
 
 - name: Create directory for OPTIONS file
   ansible.builtin.copy:
@@ -31,11 +21,10 @@
     content: |
       OPTIONS=''
     remote_src: yes
-    follow: yes
     owner: root
     group: root
-    mode: "0550"
-    when: options_file_folder.stat.exists === false
+    follow: yes
+    mode: '0770'
 
 - name: Add job to prometheus configuration
   lineinfile:
@@ -49,19 +38,18 @@
 - name: Allow all access to tcp port 9100
   community.general.ufw:
     rule: allow
-    port: "9100"
+    port: '9100'
     proto: tcp
 
 - name: Copy a service file
   ansible.builtin.copy:
     src: ../files/node_exporter.service
     dest: /usr/lib/systemd/system/node_exporter.service
-    follow: yes
     owner: root
     group: root
-    mode: "0550"
-  notify: 
-    - reload_systemd
-    - enable_node_exporter
-    - restart_node_exporter
-    - reload_prometheus
+    mode: '0770'
+  notify:
+    - Reload systemd
+    - Start node_exporter
+    - Enable node_exporter
+    - Restart prometheus

@@ -1,14 +1,12 @@
 ---
 # tasks file for EFK
 
-# Ensure user and group efk:efk exists on target server host
-
-- name: Ensure group "{{ service_group }}" exists
+- name: Ensure group {{ service_group }} exists
   ansible.builtin.group:
     name: "{{ service_group }}"
     state: present
 
-- name: Ensure user "{{ service_user }}" exists
+- name: Ensure user {{ service_user }} exists
   ansible.builtin.user:
     name: "{{ service_user }}"
     group: "{{ service_group }}"
@@ -18,13 +16,13 @@
 
 ### ElasticSearch
 
-- name: Download and Unarchive ElasticSearch package
+- name: Download and Unarchive Elasticsearch package
   ansible.builtin.unarchive:
     src: "{{ package_link_elasticsearch }}"
     dest: /tmp
     remote_src: yes
 
-- name: Move downloaded package Elasticsearch to /srv location
+- name: Move Elasticsearch package content to /srv/elasticsearch folder
   command: mv /tmp/elasticsearch-{{ version_elasticsearch }} {{ path_elasticsearch }}
   args:
     creates: "{{ path_elasticsearch }}"
@@ -35,7 +33,7 @@
     dest: /usr/lib/systemd/system/elasticsearch.service
     owner: "{{ service_group }}"
     group: "{{ service_user }}"
-    mode: "0770"
+    mode: '0770'
 
 ### Kibana
 
@@ -45,7 +43,7 @@
     dest: /tmp
     remote_src: yes
 
-- name: Move downloaded package Kibana to /srv location
+- name: Move Kibana package content to /srv/kibana folder
   command: mv /tmp/kibana-{{ version_kibana }} {{ path_kibana }}
   args:
     creates: "{{ path_kibana }}"
@@ -56,7 +54,7 @@
     dest: /usr/lib/systemd/system/kibana.service
     owner: "{{ service_group }}"
     group: "{{ service_user }}"
-    mode: "0770"
+    mode: '0770'
 
 - name: Recursively change ownership of a files
   ansible.builtin.shell: chmod 0770 -R {{ item }}
@@ -76,5 +74,5 @@
     - "{{ port_elasticsearch }}"
   notify: 
     - Reload systemd
-    - Enable services
-    - Restart services
+    - Enable efk services
+    - Start efk services

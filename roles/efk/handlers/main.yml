@@ -1,21 +1,22 @@
 ---
 # handlers file for logging
+
 - name: Reload systemd
   ansible.builtin.systemd:
     daemon_reload: true
 
-- name: Enable service
+- name: Start efk services
   ansible.builtin.systemd:
     name: "{{ item }}"
-    enabled: true
+    state: started
   with_items:
-    - "elasticsearch"
-    - "kibana"
+    - elasticsearch
+    - kibana
 
-- name: Restart service
+- name: Enable efk services
   ansible.builtin.systemd:
-    state: restarted
     name: "{{ item }}"
+    enabled: yes
   with_items:
-    - "elasticsearch"
-    - "kibana"
+    - elasticsearch
+    - kibana
