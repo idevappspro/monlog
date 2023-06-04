@@ -38,6 +38,8 @@ Bear in mind that you shouldn't have any configuration conflicts when running th
 
 ![Elasticsearch](./images/elastic.png "Elasticsearch")
 
+![Kibana](./images/kibana.png "Kibana")
+
 Use the following command to retrieve the password for http.p12:
 
 ```bash
