@@ -8,22 +8,10 @@
     - gcc
     - make
 
-- name: Remove useless packages from the cache
-  ansible.builtin.apt:
-    autoclean: yes
-
-- name: Remove dependencies that are no longer required
-  ansible.builtin.apt:
-    autoremove: yes
-
-- name: Run the equivalent of "apt-get clean" as a separate step
-  apt:
-    clean: yes
-
 - name: Download and Extract Fluent Bit source
   ansible.builtin.unarchive:
     src: https://fluentbit.io/releases/2.1/source-{{ fluentbit_version }}.tar.gz
-    dest: /tmp
+    dest: /tmp/fluent-bit-{{ fluentbit_version }}
     remote_src: yes
 
 - name: Compile and install Fluent Bit
