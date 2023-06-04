@@ -22,7 +22,7 @@
 
 - name: Download Fluent Bit source
   get_url:
-    url: "https://fluentbit.io/releases/{{ fluentbit_version }}/fluent-bit-{{ fluentbit_version }}.tar.gz"
+    url: "https://fluentbit.io/releases/2.1/source-{{ fluentbit_version }}.tar.gz"
     dest: "/tmp/fluent-bit-{{ fluentbit_version }}.tar.gz"
 
 - name: Extract Fluent Bit source
