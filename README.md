@@ -136,83 +136,92 @@ ansible-playbook playbook.yaml
 ```text
 ── ansible.cfg
 ├── images
+│   ├── elastic.png
+│   ├── kibana.png
 │   ├── node.png
 │   └── prom.png
 ├── inventory.yaml
 ├── playbook.yaml
 ├── README.md
-├── requirements.yaml
-└── roles
-    ├── efk
-    │   ├── defaults
-    │   │   └── main.yml
-    │   ├── files
-    │   ├── handlers
-    │   │   └── main.yml
-    │   ├── meta
-    │   │   └── main.yml
-    │   ├── README.md
-    │   ├── tasks
-    │   │   └── main.yml
-    │   ├── templates
-    │   ├── tests
-    │   │   ├── inventory
-    │   │   └── test.yml
-    │   └── vars
-    │       └── main.yml
-    ├── node_exporter
-    │   ├── defaults
-    │   │   └── main.yml
-    │   ├── files
-    │   │   └── node_exporter.service
-    │   ├── handlers
-    │   │   └── main.yml
-    │   ├── meta
-    │   │   └── main.yml
-    │   ├── README.md
-    │   ├── tasks
-    │   │   └── main.yml
-    │   ├── templates
-    │   ├── tests
-    │   │   ├── inventory
-    │   │   └── test.yml
-    │   └── vars
-    │       └── main.yml
-    ├── prometheus
-    │   ├── defaults
-    │   │   └── main.yml
-    │   ├── files
-    │   │   └── prometheus.service
-    │   ├── handlers
-    │   │   └── main.yml
-    │   ├── meta
-    │   │   └── main.yml
-    │   ├── README.md
-    │   ├── tasks
-    │   │   └── main.yml
-    │   ├── templates
-    │   ├── tests
-    │   │   ├── inventory
-    │   │   └── test.yml
-    │   └── vars
-    │       └── main.yml
-    └── provision_ssh_key
-        ├── defaults
-        │   └── main.yml
-        ├── files
-        │   ├── ssh_auth
-        │   └── ssh_auth.pub
-        ├── handlers
-        │   └── main.yml
-        ├── meta
-        │   └── main.yml
-        ├── README.md
-        ├── tasks
-        │   └── main.yml
-        ├── templates
-        ├── tests
-        │   ├── inventory
-        │   └── test.yml
-        └── vars
-            └── main.yml
+├── roles
+│   ├── efk
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── files
+│   │   │   ├── elasticsearch.service
+│   │   │   └── kibana.service
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── README.md
+│   │   ├── tasks
+│   │   │   ├── elasticsearch.yml
+│   │   │   ├── kibana.yml
+│   │   │   └── main.yml
+│   │   ├── tests
+│   │   │   ├── inventory
+│   │   │   └── test.yml
+│   │   └── vars
+│   │       └── main.yml
+│   ├── fluentbit
+│   │   ├── files
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   └── templates
+│   │       ├── fluent-bit.conf.j2
+│   │       └── fluent-bit.service.j2
+│   ├── node_exporter
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── files
+│   │   │   └── node_exporter.service
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── README.md
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   ├── tests
+│   │   │   ├── inventory
+│   │   │   └── test.yml
+│   │   └── vars
+│   │       └── main.yml
+│   ├── prometheus
+│   │   ├── defaults
+│   │   │   └── main.yml
+│   │   ├── files
+│   │   │   └── prometheus.service
+│   │   ├── handlers
+│   │   │   └── main.yml
+│   │   ├── meta
+│   │   │   └── main.yml
+│   │   ├── README.md
+│   │   ├── tasks
+│   │   │   └── main.yml
+│   │   ├── tests
+│   │   │   ├── inventory
+│   │   │   └── test.yml
+│   │   └── vars
+│   │       └── main.yml
+│   └── provision_ssh_key
+│       ├── defaults
+│       │   └── main.yml
+│       ├── files
+│       │   ├── ssh_auth
+│       │   └── ssh_auth.pub
+│       ├── handlers
+│       │   └── main.yml
+│       ├── meta
+│       │   └── main.yml
+│       ├── README.md
+│       ├── tasks
+│       │   └── main.yml
+│       ├── tests
+│       │   ├── inventory
+│       │   └── test.yml
+│       └── vars
+│           └── main.yml
+└── test.yaml
 ```
