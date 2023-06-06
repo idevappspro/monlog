@@ -21,7 +21,7 @@
   command: mv /tmp/kibana-{{ version_kibana }} {{ path_kibana }}
   args:
     creates: "{{ path_kibana }}"
-    
+
 - name: Copy Kibana service file
   ansible.builtin.copy:
     src: ../files/kibana.service
@@ -97,7 +97,7 @@
     rule: allow
     port: "{{ port_kibana }}"
     proto: tcp
-  notify: 
+  notify:
     - Reload systemd
     - Enable Kibana service
     - Start Kibana service

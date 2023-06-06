@@ -66,7 +66,7 @@
     rule: allow
     port: "{{ port_elasticsearch }}"
     proto: tcp
-  notify: 
+  notify:
     - Reload systemd
     - Enable Elasticsearch service
     - Start Elasticsearch service
